@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All-in-One Unit Converter</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    select, input {
+      padding: 10px;
+      font-size: 1rem;
+      margin: 0.5rem;
+    }
+    .result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔄 All-in-One Unit Converter</h1>
+
+  <select id="category">
+    <option value="length">Length</option>
+    <option value="weight">Weight</option>
+    <option value="temperature">Temperature</option>
+    <option value="time">Time</option>
+    <option value="speed">Speed</option>
+    <option value="volume">Volume</option>
+  </select>
+
+  <br />
+
+  <input type="number" id="valueInput" placeholder="Enter value" />
+  <select id="fromUnit"></select>
+  <span>→</span>
+  <select id="toUnit"></select>
+
+  <div class="result" id="resultArea"></div>
+
+  <script>
+    const categoryUnits = {
+      length: {
+        cm: 0.01,
+        m: 1,
+        inch: 0.0254,
+        ft: 0.3048,
+        km: 1000,
+        mile: 1609.34
+      },
+      weight: {
+        g: 0.001,
+        kg: 1,
+        lb: 0.453592,
+        oz: 0.0283495
+      },
+      temperature: {
+        C: 'Celsius',
+        F: 'Fahrenheit',
+        K: 'Kelvin'
+      },
+      time: {
+        sec: 1,
+        min: 60,
+        hr: 3600
+      },
+      speed: {
+        'm/s': 1,
+        'km/h': 0.277778,
+        'mph': 0.44704
+      },
+      volume: {
+        mL: 0.001,
+        L: 1,
+        cup: 0.24,
+        gal: 3.78541
+      }
+    };
+
+    const category = document.getElementById("category");
+    const fromUnit = document.getElementById("fromUnit");
+    const toUnit = document.getElementById("toUnit");
+    const valueInput = document.getElementById("valueInput");
+    const resultArea = document.getElementById("resultArea");
+
+    function updateUnits() {
+      const units = Object.keys(categoryUnits[category.value]);
+      fromUnit.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+      toUnit.innerHTML = fromUnit.innerHTML;
+      convert();
+    }
+
+    function convert() {
+      const val = parseFloat(valueInput.value);
+      const from = fromUnit.value;
+      const to = toUnit.value;
+      const cat = category.value;
+
+      if (isNaN(val)) {
+        resultArea.textContent = "";
+        return;
+      }
+
+      if (cat === 'temperature') {
+        let result;
+        if (from === to) result = val;
+        else if (from === 'C') result = to === 'F' ? val * 9/5 + 32 : val + 273.15;
+        else if (from === 'F') result = to === 'C' ? (val - 32) * 5/9 : (val - 32) * 5/9 + 273.15;
+        else if (from === 'K') result = to === 'C' ? val - 273.15 : (val - 273.15) * 9/5 + 32;
+        resultArea.textContent = `Result: ${result.toFixed(2)} ${to}`;
+      } else {
+        const base = val * categoryUnits[cat][from];
+        const result = base / categoryUnits[cat][to];
+        resultArea.textContent = `Result: ${result.toFixed(4)} ${to}`;
+      }
+    }
+
+    category.addEventListener("change", updateUnits);
+    fromUnit.addEventListener("change", convert);
+    toUnit.addEventListener("change", convert);
+    valueInput.addEventListener("input", convert);
+
+    updateUnits();
+  </script>
+</body>
+</html>
