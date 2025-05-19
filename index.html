@@ -3,49 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>All-in-One Unit Converter</title>
+  <meta name="description" content="Convert between units of length, weight, temperature, time, speed, and volume. Simple and fast all-in-one unit converter." />
+  <meta name="keywords" content="unit converter, length, weight, temperature, time, speed, volume, cm to inch, kg to lb, celsius to fahrenheit" />
+  <meta name="author" content="hiddenharm" />
+  <title>All-in-One Unit Converter | Convert Length, Weight, Temperature & More</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
       padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     h1 {
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    .converter-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 480px;
+      width: 100%;
+    }
+
+    select, input[type="number"] {
+      width: calc(50% - 12px);
+      padding: 12px;
+      font-size: 1rem;
+      margin: 8px 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    #category {
+      width: 100%;
       margin-bottom: 1rem;
     }
-    select, input {
-      padding: 10px;
-      font-size: 1rem;
-      margin: 0.5rem;
-    }
+
     .result {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      color: green;
+      margin-top: 1.5rem;
+      font-size: 1.25rem;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    @media (max-width: 500px) {
+      select, input[type="number"] {
+        width: 100%;
+        margin: 8px 0;
+      }
     }
   </style>
 </head>
 <body>
   <h1>🔄 All-in-One Unit Converter</h1>
+  <div class="converter-container">
+    <select id="category">
+      <option value="length">Length</option>
+      <option value="weight">Weight</option>
+      <option value="temperature">Temperature</option>
+      <option value="time">Time</option>
+      <option value="speed">Speed</option>
+      <option value="volume">Volume</option>
+    </select>
 
-  <select id="category">
-    <option value="length">Length</option>
-    <option value="weight">Weight</option>
-    <option value="temperature">Temperature</option>
-    <option value="time">Time</option>
-    <option value="speed">Speed</option>
-    <option value="volume">Volume</option>
-  </select>
+    <input type="number" id="valueInput" placeholder="Enter value" />
+    <select id="fromUnit"></select>
+    <select id="toUnit"></select>
 
-  <br />
-
-  <input type="number" id="valueInput" placeholder="Enter value" />
-  <select id="fromUnit"></select>
-  <span>→</span>
-  <select id="toUnit"></select>
-
-  <div class="result" id="resultArea"></div>
+    <div class="result" id="resultArea"></div>
+  </div>
 
   <script>
     const categoryUnits = {
